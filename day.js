@@ -9,6 +9,7 @@ const dayNoticeEl=document.getElementById('dayNotice');
 const prevDayEl=document.getElementById('prevDay');
 const todayDayEl=document.getElementById('todayDay');
 const nextDayEl=document.getElementById('nextDay');
+const nextScheduledEl=document.getElementById('nextScheduled');
 
 let selectedDate=localISO();
 
@@ -70,9 +71,24 @@ window.move=id=>{
   renderDay();
 };
 
+function jumpToNextScheduled(){
+  const next=tasks
+    .filter(t=>!isDaily(t)&&!t.done&&t.scheduledDate&&t.scheduledDate>selectedDate)
+    .sort(scheduledSort)[0];
+  if(!next){
+    dayNoticeEl.innerHTML='<div class="notice">There are no later scheduled tasks.</div>';
+    return;
+  }
+  selectedDate=next.scheduledDate;
+  renderDay();
+  const label=next.scheduledTime?timeLabel(next.scheduledTime):'flexible time';
+  dayNoticeEl.innerHTML=`<div class="notice">Next scheduled: <strong>${esc(next.title)}</strong> at ${label}.</div>`;
+}
+
 prevDayEl.addEventListener('click',()=>{selectedDate=addDaysISO(selectedDate,-1);renderDay()});
 nextDayEl.addEventListener('click',()=>{selectedDate=addDaysISO(selectedDate,1);renderDay()});
 todayDayEl.addEventListener('click',()=>{selectedDate=localISO();renderDay()});
+nextScheduledEl.addEventListener('click',jumpToNextScheduled);
 dayPickerEl.addEventListener('change',()=>{if(dayPickerEl.value){selectedDate=dayPickerEl.value;renderDay()}});
 
 renderDay();
