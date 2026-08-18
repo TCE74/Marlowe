@@ -8,25 +8,25 @@
 <body>
 <header><div class="headrow"><div class="logo"><span>THE</span>BOOK<br>COVER<span>CO</span></div><div><h1>Marlowe</h1><p>Your work manager — clear priorities, realistic days, one next step.</p></div></div></header>
 <div class="wrap">
-<div class="nav"><button id="dashTab" class="active">Dashboard</button><button id="allTab">All tasks</button></div>
+<div class="nav"><button id="dashTab" class="active">Dashboard</button><button id="allTab">All tasks</button><a class="navlink" href="day.html">Day planner</a></div>
 <section id="dashboardView" class="view active">
 <div class="card next"><div><h2>What should I do next?</h2><div id="nextTask"></div></div><img class="marlowe-avatar" src="marlowe-avatar.svg" alt="Marlowe"></div>
 <div class="grid"><div>
 <div class="card"><h2>Add task</h2><form id="addForm">
 <input class="taskname" id="title" placeholder="What needs doing?" required>
-<select id="category"><option>Customer follow-up</option><option>Client visit</option><option>School visits</option><option>CoverPro</option><option>Production</option><option>Sales & marketing</option><option>Admin</option><option selected>General</option></select>
+<select id="category"><option>Customer follow-up</option><option>Client visit</option><option>School visits</option><option>CoverPro</option><option>Production</option><option>Sales & marketing</option><option>Admin</option><option>Daily</option><option selected>General</option></select>
 <select id="priority"><option value="3">Normal</option><option value="2">Important</option><option value="1">Urgent</option></select>
 <input id="minutes" type="number" min="5" step="5" value="30" title="Duration in minutes">
 <button class="primary">Add</button>
 <input id="due" type="date" title="Due date"><select id="bucket"><option value="backlog">Backlog</option><option value="today">Today</option></select>
 <div class="schedule-row"><label>Scheduled date<input id="scheduledDate" type="date"></label><label>Start time<input id="scheduledTime" type="time"></label><label>Duration (min)<input id="scheduledMinutes" type="number" min="5" step="5" placeholder="uses duration above"></label></div>
-</form><p class="muted">Leave schedule fields blank for a normal backlog/Today task. Add a date and time for a fixed appointment or work block.</p></div>
+</form><p class="muted">Choose <strong>Daily</strong> to create a task that appears fresh every day. Leave schedule fields blank for normal backlog/Today work; add a date and time for a fixed appointment or work block.</p></div>
 <div class="card"><h2>Today</h2><div id="today"></div></div>
 <div class="card"><h2>Upcoming scheduled</h2><div id="upcoming"></div></div>
 <div class="card"><h2>Backlog</h2><div id="backlog"></div></div>
 </div><div>
 <div class="card"><h2>Day at a glance</h2><div class="stats"><div class="stat"><b id="todayCount">0</b>open today</div><div class="stat"><b id="todayMinutes">0</b>minutes planned</div><div class="stat"><b id="projectedFinish">—</b>estimated finish</div><div class="stat"><b id="doneCount">0</b>completed</div></div><div id="dayWarning"></div></div>
-<div class="card"><h2>Marlowe's rules</h2><ul class="rules"><li>Backlog tasks are not automatically scheduled.</li><li>Fixed scheduled tasks have a date, start time and duration.</li><li>Prefer one clear recommendation over a giant priority list.</li><li>School visits should finish by 2:30 pm.</li><li>Default workday finish is around 5:00 pm.</li><li>Future business-day capacity is 8:00 am–5:00 pm.</li></ul></div>
+<div class="card"><h2>Marlowe's rules</h2><ul class="rules"><li>Backlog tasks are not automatically scheduled.</li><li>Daily tasks reappear every day; checking one off only completes today's occurrence.</li><li>Fixed scheduled tasks have a date, start time and duration.</li><li>Prefer one clear recommendation over a giant priority list.</li><li>School visits should finish by 2:30 pm.</li><li>Default workday finish is around 5:00 pm.</li><li>Future business-day capacity is 8:00 am–5:00 pm.</li></ul></div>
 <div class="card"><h2>Data</h2><div class="toolbar"><button id="exportBtn">Export tasks</button><button id="importBtn">Import tasks</button><button id="clearDone" class="ghost">Clear completed</button></div><input type="file" id="fileInput" accept="application/json" hidden><p class="muted">Tasks stay in this browser. Export occasionally for backup or another device.</p></div>
 </div></div></section>
 <section id="allView" class="view"><div class="card"><h2>All tasks</h2><div class="filters"><select id="filterCategory"><option value="all">All categories</option></select><select id="sortAll"><option value="schedule">Scheduled first</option><option value="due">Due soonest</option><option value="category">Category</option><option value="priority">Priority</option><option value="minutes">Shortest first</option><option value="created">Newest first</option></select><select id="statusFilter"><option value="open">Open tasks</option><option value="all">Open + completed</option><option value="done">Completed only</option></select></div><div id="allTasks"></div></div></section>
