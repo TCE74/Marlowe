@@ -11,7 +11,8 @@ const todayDayEl=document.getElementById('todayDay');
 const nextDayEl=document.getElementById('nextDay');
 const nextScheduledEl=document.getElementById('nextScheduled');
 
-let selectedDate=localISO();
+const requestedDate=new URLSearchParams(location.search).get('date');
+let selectedDate=requestedDate&&/^\d{4}-\d{2}-\d{2}$/.test(requestedDate)?requestedDate:localISO();
 
 function renderDay(){
   dayPickerEl.value=selectedDate;
