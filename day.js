@@ -1,7 +1,78 @@
+const dayPickerEl=document.getElementById('dayPicker');
+const dayTitleEl=document.getElementById('dayTitle');
+const daySummaryEl=document.getElementById('daySummary');
+const dayTasksEl=document.getElementById('dayTasks');
+const dayCountEl=document.getElementById('dayCount');
+const dayMinutesEl=document.getElementById('dayMinutes');
+const dayFinishEl=document.getElementById('dayFinish');
+const dayNoticeEl=document.getElementById('dayNotice');
+const prevDayEl=document.getElementById('prevDay');
+const todayDayEl=document.getElementById('todayDay');
+const nextDayEl=document.getElementById('nextDay');
+
 let selectedDate=localISO();
-function renderDay(){dayPicker.value=selectedDate;dayTitle.textContent=fullDateLabel(selectedDate);const list=tasksForDate(selectedDate);const fm=todayFinishMap(list,selectedDate);dayTasks.innerHTML=list.length?list.map(t=>taskHTML(t,fm,'',selectedDate)).join(''):'<div class="empty">Nothing planned for this day.</div>';const open=list.filter(t=>!isDoneForDate(t,selectedDate));dayCount.textContent=open.length;const mins=open.reduce((a,t)=>a+Number(t.minutes||0),0);dayMinutes.textContent=mins;const ends=open.map(t=>fm[t.id]).filter(Number.isFinite);const finish=ends.length?Math.max(...ends):null;dayFinish.textContent=finish?fmtClock(finish):'—';const dailyCount=list.filter(isDaily).length,scheduledCount=list.filter(t=>t.scheduledDate===selectedDate).length;daySummary.textContent=`${dailyCount} daily task${dailyCount===1?'':'s'} · ${scheduledCount} scheduled task${scheduledCount===1?'':'s'}`;dayNotice.innerHTML=finish>WORK_END?'<div class="notice">This day currently runs past 5:00 pm.</div>':''}
-window.toggleForDate=(id,date)=>{const t=tasks.find(x=>x.id===id);if(!t)return;setDoneForDate(t,date,!isDoneForDate(t,date));localStorage.setItem(KEY,JSON.stringify(tasks));renderDay()};
-window.del=id=>{if(!confirm('Delete this task?'))return;tasks=tasks.filter(x=>x.id!==id);localStorage.setItem(KEY,JSON.stringify(tasks));renderDay()};
-window.move=id=>{const t=tasks.find(x=>x.id===id);if(!t||isDaily(t))return;if(t.scheduledDate){t.scheduledDate='';t.scheduledTime='';t.bucket='backlog'}else t.bucket=t.bucket==='today'?'backlog':'today';localStorage.setItem(KEY,JSON.stringify(tasks));renderDay()};
-prevDay.onclick=()=>{selectedDate=addDaysISO(selectedDate,-1);renderDay()};nextDay.onclick=()=>{selectedDate=addDaysISO(selectedDate,1);renderDay()};todayDay.onclick=()=>{selectedDate=localISO();renderDay()};dayPicker.onchange=()=>{if(dayPicker.value){selectedDate=dayPicker.value;renderDay()}};
+
+function renderDay(){
+  dayPickerEl.value=selectedDate;
+  dayTitleEl.textContent=fullDateLabel(selectedDate);
+
+  const list=tasksForDate(selectedDate);
+  const fm=todayFinishMap(list,selectedDate);
+
+  dayTasksEl.innerHTML=list.length
+    ? list.map(t=>taskHTML(t,fm,'',selectedDate)).join('')
+    : '<div class="empty">Nothing planned for this day.</div>';
+
+  const open=list.filter(t=>!isDoneForDate(t,selectedDate));
+  dayCountEl.textContent=open.length;
+
+  const mins=open.reduce((a,t)=>a+Number(t.minutes||0),0);
+  dayMinutesEl.textContent=mins;
+
+  const ends=open.map(t=>fm[t.id]).filter(Number.isFinite);
+  const finish=ends.length?Math.max(...ends):null;
+  dayFinishEl.textContent=finish?fmtClock(finish):'—';
+
+  const dailyCount=list.filter(isDaily).length;
+  const scheduledCount=list.filter(t=>!isDaily(t)&&t.scheduledDate===selectedDate).length;
+  const flexibleCount=selectedDate===localISO()?list.filter(t=>!isDaily(t)&&!t.scheduledDate&&t.bucket==='today').length:0;
+
+  daySummaryEl.textContent=`${dailyCount} daily · ${scheduledCount} scheduled${flexibleCount?` · ${flexibleCount} flexible`:''}`;
+  dayNoticeEl.innerHTML=finish>WORK_END?'<div class="notice">This day currently runs past 5:00 pm.</div>':'';
+}
+
+window.toggleForDate=(id,date)=>{
+  const t=tasks.find(x=>x.id===id);
+  if(!t)return;
+  setDoneForDate(t,date,!isDoneForDate(t,date));
+  localStorage.setItem(KEY,JSON.stringify(tasks));
+  renderDay();
+};
+
+window.del=id=>{
+  if(!confirm('Delete this task?'))return;
+  tasks=tasks.filter(x=>x.id!==id);
+  localStorage.setItem(KEY,JSON.stringify(tasks));
+  renderDay();
+};
+
+window.move=id=>{
+  const t=tasks.find(x=>x.id===id);
+  if(!t||isDaily(t))return;
+  if(t.scheduledDate){
+    t.scheduledDate='';
+    t.scheduledTime='';
+    t.bucket='backlog';
+  }else{
+    t.bucket=t.bucket==='today'?'backlog':'today';
+  }
+  localStorage.setItem(KEY,JSON.stringify(tasks));
+  renderDay();
+};
+
+prevDayEl.addEventListener('click',()=>{selectedDate=addDaysISO(selectedDate,-1);renderDay()});
+nextDayEl.addEventListener('click',()=>{selectedDate=addDaysISO(selectedDate,1);renderDay()});
+todayDayEl.addEventListener('click',()=>{selectedDate=localISO();renderDay()});
+dayPickerEl.addEventListener('change',()=>{if(dayPickerEl.value){selectedDate=dayPickerEl.value;renderDay()}});
+
 renderDay();
