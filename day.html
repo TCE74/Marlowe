@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Marlowe — Day Planner</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header><div class="headrow"><div class="logo"><span>THE</span>BOOK<br>COVER<span>CO</span></div><div><h1>Marlowe</h1><p>Day planner — look ahead, look back, and see the shape of a day.</p></div></div></header>
+<div class="wrap">
+<div class="nav"><a class="navlink" href="index.html">Dashboard</a><a class="navlink active-link" href="day.html">Day planner</a></div>
+<section class="card">
+<div class="day-controls"><button id="prevDay">← Previous</button><button id="todayDay" class="primary">Today</button><button id="nextDay">Next →</button><input id="dayPicker" type="date"></div>
+<div class="day-heading"><div><h2 id="dayTitle">Day planner</h2><p id="daySummary" class="muted"></p></div><img class="marlowe-avatar small-avatar" src="marlowe-avatar.svg" alt="Marlowe"></div>
+</section>
+<section class="grid"><div>
+<div class="card"><h2>Tasks for this day</h2><div id="dayTasks"></div></div>
+</div><div>
+<div class="card"><h2>At a glance</h2><div class="stats"><div class="stat"><b id="dayCount">0</b>open tasks</div><div class="stat"><b id="dayMinutes">0</b>minutes</div><div class="stat"><b id="dayFinish">—</b>estimated finish</div></div><div id="dayNotice"></div></div>
+<div class="card"><h2>What appears here</h2><ul class="rules"><li>Daily tasks appear on every date.</li><li>Scheduled tasks appear on their assigned date and time.</li><li>Today's flexible Today-list tasks appear on today only.</li><li>Daily completion is tracked separately for each date.</li></ul></div>
+</div></section>
+</div>
+<script src="app-core.js"></script><script src="day.js"></script>
+</body></html>
